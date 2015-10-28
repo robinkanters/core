@@ -6,30 +6,57 @@ use OCA\DAV\Connector\Sabre\Directory;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\IFile;
 
+/**
+ * Class FutureFile
+ *
+ * The FutureFile is a SabreDav IFile which connects the chunked upload directory
+ * with the AssemblyStream, who does the final assembly job
+ *
+ * @package OCA\DAV\Upload
+ */
 class FutureFile implements \Sabre\DAV\IFile {
 
+	/**
+	 * @param Directory $root
+	 * @param string $name
+	 */
 	function __construct(Directory $root, $name) {
 		$this->root = $root;
 		$this->name = $name;
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	function put($data) {
 		throw new Forbidden('Permission denied to put into this file');
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	function get() {
 		$nodes = $this->root->getChildren();
 		return \OCA\DAV\Upload\AssemblyStream::wrap($nodes);
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	function getContentType() {
 		return 'application/octet-stream';
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	function getETag() {
 		return $this->root->getETag();
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	function getSize() {
 		$children = $this->root->getChildren();
 		$sizes = array_map(function($node) {
@@ -41,39 +68,28 @@ class FutureFile implements \Sabre\DAV\IFile {
 	}
 
 	/**
-	 * Deleted the current node
-	 *
-	 * @throws Forbidden
+	 * @inheritdoc
 	 */
 	function delete() {
 		throw new Forbidden('Permission denied to delete this file');
 	}
 
 	/**
-	 * Returns the name of the node.
-	 *
-	 * This is used to generate the url.
-	 *
-	 * @return string
+	 * @inheritdoc
 	 */
 	function getName() {
 		return $this->name;
 	}
 
 	/**
-	 * Renames the node
-	 *
-	 * @param string $name The new name
-	 * @return void
+	 * @inheritdoc
 	 */
 	function setName($name) {
 		throw new Forbidden('Permission denied to rename this file');
 	}
 
 	/**
-	 * Returns the last modification time, as a unix timestamp
-	 *
-	 * @return int
+	 * @inheritdoc
 	 */
 	function getLastModified() {
 		return $this->root->getLastModified();

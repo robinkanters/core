@@ -4,6 +4,15 @@ namespace OCA\DAV\Upload;
 
 use Sabre\DAV\IFile;
 
+/**
+ * Class AssemblyStream
+ *
+ * The assembly stream is a virtual stream that wraps multiple chunks.
+ * Reading from the stream transparently accessed the underlying chunks and
+ * give a representation as if they were already merged together.
+ *
+ * @package OCA\DAV\Upload
+ */
 class AssemblyStream implements \Icewind\Streams\File {
 
 	/** @var resource */
@@ -33,6 +42,7 @@ class AssemblyStream implements \Icewind\Streams\File {
 
 		// sort the nodes
 		$nodes = $this->nodes;
+		// http://stackoverflow.com/a/10985500
 		@usort($nodes, function(IFile $a, IFile $b) {
 			return strcmp($a->getName(), $b->getName());
 		});
@@ -147,6 +157,7 @@ class AssemblyStream implements \Icewind\Streams\File {
 	 * @return bool
 	 */
 	public function stream_close() {
+		return true;
 	}
 
 
@@ -209,7 +220,7 @@ class AssemblyStream implements \Icewind\Streams\File {
 
 	/**
 	 * @param IFile $node
-	 * @return mixed
+	 * @return resource
 	 */
 	private function getStream(IFile $node) {
 		$data = $node->get();
