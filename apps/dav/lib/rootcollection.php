@@ -36,11 +36,15 @@ class RootCollection extends SimpleCollection {
 		$addressBookRoot = new AddressBookRoot($principalBackend, $cardDavBackend, 'principals/users');
 		$addressBookRoot->disableListing = $disableListing;
 
+		$uploadCollection = new Upload\RootCollection($principalBackend);
+		$uploadCollection->disableListing = $disableListing;
+
 		$children = [
 				new SimpleCollection('principals', [$principalCollection]),
 				$filesCollection,
 				$calendarRoot,
 				$addressBookRoot,
+				$uploadCollection,
 		];
 
 		parent::__construct('root', $children);
