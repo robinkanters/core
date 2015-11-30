@@ -29,6 +29,9 @@ use \OCA\Files_External\Lib\StorageConfig;
 use OCP\IUser;
 use Test\Traits\UserTrait;
 
+/**
+ * @group DB
+ */
 class UserGlobalStoragesServiceTest extends GlobalStoragesServiceTest {
 	use UserTrait;
 

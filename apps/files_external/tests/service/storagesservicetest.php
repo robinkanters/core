@@ -45,6 +45,9 @@ class CleaningDBConfig extends DBConfigService {
 	}
 }
 
+/**
+ * @group DB
+ */
 abstract class StoragesServiceTest extends \Test\TestCase {
 
 	/**
@@ -155,7 +158,9 @@ abstract class StoragesServiceTest extends \Test\TestCase {
 	public function tearDown() {
 		\OC_Mount_Config::$skipTest = false;
 		self::$hookCalls = array();
-		$this->dbConfig->clean();
+		if ($this->dbConfig) {
+			$this->dbConfig->clean();
+		}
 	}
 
 	protected function getBackendMock($class = '\OCA\Files_External\Lib\Backend\SMB', $storageClass = '\OC\Files\Storage\SMB') {

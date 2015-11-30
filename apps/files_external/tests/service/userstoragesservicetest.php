@@ -28,6 +28,9 @@ use \OCA\Files_external\NotFoundException;
 use \OCA\Files_external\Lib\StorageConfig;
 use Test\Traits\UserTrait;
 
+/**
+ * @group DB
+ */
 class UserStoragesServiceTest extends StoragesServiceTest {
 	use UserTrait;
 
