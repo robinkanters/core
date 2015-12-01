@@ -167,7 +167,7 @@ class DBConfigService {
 				'type' => $builder->createNamedParameter($type, \PDO::PARAM_INT)
 			]);
 		$query->execute();
-		return (int) $this->connection->lastInsertId('external_mounts');
+		return (int)$this->connection->lastInsertId('external_mounts');
 	}
 
 	/**
@@ -220,7 +220,7 @@ class DBConfigService {
 		$count = $this->connection->insertIfNotExist('*PREFIX*external_options', [
 			'mount_id' => $mountId,
 			'key' => $key,
-			'value' => $value
+			'value' => json_encode($value)
 		], ['mount_id', 'key']);
 		if ($count === 0) {
 			$builder = $this->connection->getQueryBuilder();
@@ -327,7 +327,12 @@ class DBConfigService {
 	 */
 	public function getOptionsForMounts($mountIds) {
 		$mountOptions = $this->selectForMounts('external_options', ['key', 'value'], $mountIds);
-		return array_map([$this, 'createKeyValueMap'], $mountOptions);
+		$optionsMap = array_map([$this, 'createKeyValueMap'], $mountOptions);
+		return array_map(function (array $options) {
+			return array_map(function ($option) {
+				return json_decode($option);
+			}, $options);
+		}, $optionsMap);
 	}
 
 	/**
