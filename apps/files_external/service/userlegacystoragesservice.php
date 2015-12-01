@@ -23,6 +23,9 @@ namespace OCA\Files_external\Service;
 
 use OCP\IUserSession;
 
+/**
+ * Read user defined mounts from the legacy mount.json
+ */
 class UserLegacyStoragesService extends LegacyStoragesService {
 	/**
 	 * @var IUserSession

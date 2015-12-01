@@ -21,6 +21,9 @@
 
 namespace OCA\Files_external\Service;
 
+/**
+ * Read admin defined mounts from the legacy mount.json
+ */
 class GlobalLegacyStoragesService extends LegacyStoragesService {
 	/**
 	 * @param BackendService $backendService

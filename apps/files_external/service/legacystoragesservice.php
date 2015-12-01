@@ -24,7 +24,7 @@ namespace OCA\Files_external\Service;
 use \OCA\Files_external\Lib\StorageConfig;
 
 /**
- * Service class to manage external storages
+ * Read mount config from legacy mount.json
  */
 abstract class LegacyStoragesService {
 	/** @var BackendService */

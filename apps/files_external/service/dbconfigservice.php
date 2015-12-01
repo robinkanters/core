@@ -24,6 +24,9 @@ namespace OCA\Files_External\Service;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
+/**
+ * Stores the mount config in the database
+ */
 class DBConfigService {
 	const MOUNT_TYPE_ADMIN = 1;
 	const MOUNT_TYPE_PERSONAl = 2;
@@ -63,6 +66,11 @@ class DBConfigService {
 		}
 	}
 
+	/**
+	 * Get admin defined mounts
+	 *
+	 * @return array
+	 */
 	public function getAdminMounts() {
 		$builder = $this->connection->getQueryBuilder();
 		$query = $builder->select(['mount_id', 'mount_point', 'storage_backend', 'auth_backend', 'priority', 'type'])
@@ -87,6 +95,8 @@ class DBConfigService {
 	}
 
 	/**
+	 * Get mounts by applicable
+	 *
 	 * @param int $type any of the self::APPLICABLE_TYPE_ constants
 	 * @param string|null $value user_id, group_id or null for global mounts
 	 * @return array
@@ -99,6 +109,8 @@ class DBConfigService {
 	}
 
 	/**
+	 * Get admin defined mounts by applicable
+	 *
 	 * @param int $type any of the self::APPLICABLE_TYPE_ constants
 	 * @param string|null $value user_id, group_id or null for global mounts
 	 * @return array
@@ -112,6 +124,8 @@ class DBConfigService {
 	}
 
 	/**
+	 * Get admin defined mounts for multiple applicable
+	 *
 	 * @param int $type any of the self::APPLICABLE_TYPE_ constants
 	 * @param string[] $values user_ids or group_ids
 	 * @return array
@@ -133,6 +147,8 @@ class DBConfigService {
 	}
 
 	/**
+	 * Get user defined mounts by applicable
+	 *
 	 * @param int $type any of the self::APPLICABLE_TYPE_ constants
 	 * @param string|null $value user_id, group_id or null for global mounts
 	 * @return array
@@ -146,6 +162,8 @@ class DBConfigService {
 	}
 
 	/**
+	 * Add a mount to the database
+	 *
 	 * @param string $mountPoint
 	 * @param string $storageBackend
 	 * @param string $authBackend
@@ -171,6 +189,8 @@ class DBConfigService {
 	}
 
 	/**
+	 * Remove a mount from the database
+	 *
 	 * @param int $mountId
 	 */
 	public function removeMount($mountId) {
