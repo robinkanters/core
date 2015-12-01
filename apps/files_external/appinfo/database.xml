@@ -60,6 +60,7 @@
 				<length>6</length>
 			</field>
 			<field>
+				<!--foreign key: external_mounts.mount_id-->
 				<name>mount_id</name>
 				<type>integer</type>
 				<notnull>true</notnull>
@@ -126,6 +127,7 @@
 				<length>6</length>
 			</field>
 			<field>
+				<!--foreign key: external_mounts.mount_id-->
 				<name>mount_id</name>
 				<type>integer</type>
 				<notnull>true</notnull>
@@ -177,6 +179,7 @@
 				<length>6</length>
 			</field>
 			<field>
+				<!--foreign key: external_mounts.mount_id-->
 				<name>mount_id</name>
 				<type>integer</type>
 				<notnull>true</notnull>
