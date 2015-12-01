@@ -167,7 +167,7 @@ class DBConfigService {
 				'type' => $builder->createNamedParameter($type, \PDO::PARAM_INT)
 			]);
 		$query->execute();
-		return $this->connection->lastInsertId('external_mounts');
+		return (int) $this->connection->lastInsertId('external_mounts');
 	}
 
 	/**
