@@ -140,10 +140,11 @@ class DBConfigServiceTest extends TestCase {
 	public function testSetConfigOverwrite() {
 		$id = $this->addMount('/test', 'foo', 'bar', 100, DBConfigService::MOUNT_TYPE_ADMIN);
 		$this->dbConfig->setConfig($id, 'foo', 'bar');
+		$this->dbConfig->setConfig($id, 'asd', '1');
 		$this->dbConfig->setConfig($id, 'foo', 'qwerty');
 
 		$mount = $this->dbConfig->getMountById($id);
-		$this->assertEquals(['foo' => 'qwerty'], $mount['config']);
+		$this->assertEquals(['foo' => 'qwerty', 'asd' => '1'], $mount['config']);
 	}
 
 	public function testSetOption() {
@@ -157,6 +158,16 @@ class DBConfigServiceTest extends TestCase {
 
 		$mount = $this->dbConfig->getMountById($id);
 		$this->assertEquals(['foo' => 'bar', 'foo2' => 'bar2'], $mount['options']);
+	}
+
+	public function testSetOptionOverwrite() {
+		$id = $this->addMount('/test', 'foo', 'bar', 100, DBConfigService::MOUNT_TYPE_ADMIN);
+		$this->dbConfig->setOption($id, 'foo', 'bar');
+		$this->dbConfig->setOption($id, 'asd', '1');
+		$this->dbConfig->setOption($id, 'foo', 'qwerty');
+
+		$mount = $this->dbConfig->getMountById($id);
+		$this->assertEquals(['foo' => 'qwerty', 'asd' => '1'], $mount['options']);
 	}
 
 	public function testGetMountsFor() {

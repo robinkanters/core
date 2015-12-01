@@ -206,7 +206,9 @@ class DBConfigService {
 		if ($count === 0) {
 			$builder = $this->connection->getQueryBuilder();
 			$query = $builder->update('external_config')
-				->set('value', $builder->createNamedParameter($value, \PDO::PARAM_STR));
+				->set('value', $builder->createNamedParameter($value, \PDO::PARAM_STR))
+				->where($builder->expr()->eq('mount_id', $builder->createNamedParameter($mountId, \PDO::PARAM_INT)))
+				->andWhere($builder->expr()->eq('key', $builder->createNamedParameter($key, \PDO::PARAM_STR)));
 			$query->execute();
 		}
 	}
@@ -225,7 +227,9 @@ class DBConfigService {
 		if ($count === 0) {
 			$builder = $this->connection->getQueryBuilder();
 			$query = $builder->update('external_options')
-				->set('value', $builder->createNamedParameter($value, \PDO::PARAM_STR));
+				->set('value', $builder->createNamedParameter(json_encode($value), \PDO::PARAM_STR))
+				->where($builder->expr()->eq('mount_id', $builder->createNamedParameter($mountId, \PDO::PARAM_INT)))
+				->andWhere($builder->expr()->eq('key', $builder->createNamedParameter($key, \PDO::PARAM_STR)));
 			$query->execute();
 		}
 	}
