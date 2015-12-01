@@ -31,8 +31,12 @@ use OCA\Files_external\Service\UserLegacyStoragesService;
 use OCA\Files_external\Service\UserStoragesService;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\ILogger;
 use OCP\IUserSession;
 
+/**
+ * Migrate mount config from mount.json to the database
+ */
 class StorageMigrator {
 	/**
 	 * @var BackendService
@@ -60,6 +64,11 @@ class StorageMigrator {
 	private $connection;
 
 	/**
+	 * @var ILogger
+	 */
+	private $logger;
+
+	/**
 	 * StorageMigrator constructor.
 	 *
 	 * @param BackendService $backendService
@@ -67,19 +76,22 @@ class StorageMigrator {
 	 * @param IUserSession $userSession
 	 * @param IConfig $config
 	 * @param IDBConnection $connection
+	 * @param ILogger $logger
 	 */
 	public function __construct(
 		BackendService $backendService,
 		DBConfigService $dbConfig,
 		IUserSession $userSession,
 		IConfig $config,
-		IDBConnection $connection
+		IDBConnection $connection,
+		ILogger $logger
 	) {
 		$this->backendService = $backendService;
 		$this->dbConfig = $dbConfig;
 		$this->userSession = $userSession;
 		$this->config = $config;
 		$this->connection = $connection;
+		$this->logger = $logger;
 	}
 
 	private function migrate(LegacyStoragesService $legacyService, StoragesService $storageService) {
@@ -92,6 +104,7 @@ class StorageMigrator {
 			}
 			$this->connection->commit();
 		} catch (\Exception $e) {
+			$this->logger->logException($e);
 			$this->connection->rollBack();
 		}
 	}
