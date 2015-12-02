@@ -394,8 +394,10 @@ Feature: sharing
     And User "user1" moved file "/textfile0.txt" to "/common/textfile0.txt"
     And User "user1" moved file "/common/textfile0.txt" to "/common/sub/textfile0.txt"
     And As an "user2"
-    When Downloading file "/common/sub/textfile0.txt" with range "bytes=0-12"
-    Then Downloaded content should be "ownCloud test"
+    When Downloading file "/common/sub/textfile0.txt" with range "bytes=9-17"
+    Then Downloaded content should be "test text"
+    And user "user2" should see following elements
+      | /common/sub/textfile0.txt |
 
   Scenario: Delete all group shares
     Given As an "admin"

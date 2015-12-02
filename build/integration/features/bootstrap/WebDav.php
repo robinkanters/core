@@ -108,7 +108,6 @@ trait WebDav{
 	 * @param \Behat\Gherkin\Node\TableNode|null $expectedElements
 	 */
 	public function checkElementList($user, $expectedElements){
-		$elementList = $this->listFolder($user, '/', 2);
 		if ($expectedElements instanceof \Behat\Gherkin\Node\TableNode) {
 			$elementRows = $expectedElements->getRows();
 			$elementsSimplified = $this->simplifyArray($elementRows);
@@ -140,7 +139,7 @@ trait WebDav{
 	 */
 	public function userCreatedAFolder($user, $destination){
 		try {
-			$this->response = $this->makeDavRequest($user, "MKCOL", $destination, NULL, NULL);
+			$this->response = $this->makeDavRequest($user, "MKCOL", $destination, []);
 		} catch (\GuzzleHttp\Exception\ServerException $e) {
 			// 4xx and 5xx responses cause an exception
 			$this->response = $e->getResponse();
