@@ -135,5 +135,17 @@ trait WebDav{
 		}
 	}
 
+	/**
+	 * @Given User :user created a folder :destination
+	 */
+	public function userCreatedAFolder($user, $destination){
+		try {
+			$this->response = $this->makeDavRequest($user, "MKCOL", $destination, NULL, NULL);
+		} catch (\GuzzleHttp\Exception\ServerException $e) {
+			// 4xx and 5xx responses cause an exception
+			$this->response = $e->getResponse();
+		}
+	}
+
 }
 
