@@ -115,10 +115,10 @@ class DefaultShareProvider implements IShareProvider {
 		$qb->setValue('permissions', $qb->createNamedParameter($share->getPermissions()));
 
 		// Set who created this share
-		$qb->setValue('uid_owner', $qb->createNamedParameter($share->getSharedBy()->getUID()));
+		$qb->setValue('uid_initiator', $qb->createNamedParameter($share->getSharedBy()->getUID()));
 
 		// Set who is the owner of this file/folder (and this the owner of the share)
-		$qb->setValue('uid_fileowner', $qb->createNamedParameter($share->getShareOwner()->getUID()));
+		$qb->setValue('uid_owner', $qb->createNamedParameter($share->getShareOwner()->getUID()));
 
 		// Set the file target
 		$qb->setValue('file_target', $qb->createNamedParameter($share->getTarget()));
@@ -302,16 +302,21 @@ class DefaultShareProvider implements IShareProvider {
 			$share->setSharedWith($data['share_with']);
 		}
 
-		$share->setSharedBy($this->userManager->get($data['uid_owner']));
+		if ($data['uid_initiator'] === null) {
+			//OLD SHARE
+			$share->setSharedBy($this->userManager->get($data['uid_owner']));
+			$folder = $this->rootFolder->getUserFolder($share->getSharedBy()->getUID());
+			$path = $folder->getById((int)$data['file_source'])[0];
 
-		// TODO: getById can return an array. How to handle this properly??
-		$folder = $this->rootFolder->getUserFolder($share->getSharedBy()->getUID());
-		$path = $folder->getById((int)$data['file_source'])[0];
+			$owner = $path->getOwner();
+			$share->setShareOwner($owner);
+		} else {
+			//New share!
+			$share->setSharedBy($this->userManager->get($data['uid_initiator']));
+			$share->setShareOwner($this->userManager->get($data['uid_owner']));
+		}
 
-		$owner = $path->getOwner();
-		$share->setShareOwner($owner);
-
-		$path = $this->rootFolder->getUserFolder($owner->getUID())->getById((int)$data['file_source'])[0];
+		$path = $this->rootFolder->getUserFolder($share->getShareOwner()->getUID())->getById((int)$data['file_source'])[0];
 		$share->setPath($path);
 
 		if ($data['expiration'] !== null) {
